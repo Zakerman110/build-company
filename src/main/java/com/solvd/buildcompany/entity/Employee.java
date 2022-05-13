@@ -29,6 +29,10 @@ public class Employee extends BaseEntity {
     @Column(name = "hire_date")
     private Date hireDate;
 
+    @ManyToOne
+    @JoinColumn(name = "offices_id", referencedColumnName = "id")
+    private Office office;
+
     @ManyToMany
     @JoinTable(
         name = "employees_has_specialties",
@@ -53,6 +57,7 @@ public class Employee extends BaseEntity {
                     String address,
                     Date birthDate,
                     Date hireDate,
+                    Office office,
                     List<Specialty> employeeSpecialties,
                     List<Crew> employeeCrews) {
         this.firstName = firstName;
@@ -62,6 +67,7 @@ public class Employee extends BaseEntity {
         this.address = address;
         this.birthDate = birthDate;
         this.hireDate = hireDate;
+        this.office = office;
         this.employeeSpecialties = employeeSpecialties;
         this.employeeCrews = employeeCrews;
     }
@@ -122,6 +128,14 @@ public class Employee extends BaseEntity {
         this.hireDate = hireDate;
     }
 
+    public Office getOffice() {
+        return office;
+    }
+
+    public void setOffice(Office office) {
+        this.office = office;
+    }
+
     public List<Specialty> getEmployeeSpecialties() {
         return employeeSpecialties;
     }
@@ -144,20 +158,18 @@ public class Employee extends BaseEntity {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         Employee employee = (Employee) o;
-        return Objects.equals(firstName, employee.firstName) &&
-                Objects.equals(lastName, employee.lastName) &&
-                Objects.equals(phone, employee.phone) &&
-                Objects.equals(email, employee.email) &&
-                Objects.equals(address, employee.address) &&
-                Objects.equals(birthDate, employee.birthDate) &&
-                Objects.equals(hireDate, employee.hireDate) &&
+        return Objects.equals(firstName, employee.firstName) && Objects.equals(lastName, employee.lastName) &&
+                Objects.equals(phone, employee.phone) && Objects.equals(email, employee.email) &&
+                Objects.equals(address, employee.address) && Objects.equals(birthDate, employee.birthDate) &&
+                Objects.equals(hireDate, employee.hireDate) && Objects.equals(office, employee.office) &&
                 Objects.equals(employeeSpecialties, employee.employeeSpecialties) &&
                 Objects.equals(employeeCrews, employee.employeeCrews);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), firstName, lastName, phone, email, address, birthDate, hireDate, employeeSpecialties, employeeCrews);
+        return Objects.hash(super.hashCode(), firstName, lastName, phone, email, address, birthDate,
+                hireDate, office, employeeSpecialties, employeeCrews);
     }
 
     @Override
@@ -170,6 +182,7 @@ public class Employee extends BaseEntity {
                 ", address='" + address + '\'' +
                 ", birthDate=" + birthDate +
                 ", hireDate=" + hireDate +
+                ", office=" + office +
                 ", employeeSpecialties=" + employeeSpecialties +
                 ", employeeCrews=" + employeeCrews +
                 '}';

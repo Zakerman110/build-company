@@ -2,7 +2,10 @@ package com.solvd.buildcompany.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 @Entity(name = "customers")
@@ -17,17 +20,21 @@ public class Customer extends BaseEntity {
     @Column(length = 45, name = "phone")
     private String phone;
 
-    @Column(name = "createdAt")
+    @Column(name = "created_at")
     private Date createdAt;
+
+    @OneToMany(mappedBy = "office", targetEntity=Order.class)
+    private List<Order> orders;
 
     public Customer() {
     }
 
-    public Customer(String firstName, String lastName, String phone, Date createdAt) {
+    public Customer(String firstName, String lastName, String phone, Date createdAt, List<Order> orders) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.phone = phone;
         this.createdAt = createdAt;
+        this.orders = orders;
     }
 
     public String getFirstName() {
@@ -62,19 +69,30 @@ public class Customer extends BaseEntity {
         this.createdAt = createdAt;
     }
 
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         Customer customer = (Customer) o;
-        return Objects.equals(firstName, customer.firstName) && Objects.equals(lastName, customer.lastName) &&
-                Objects.equals(phone, customer.phone) && Objects.equals(createdAt, customer.createdAt);
+        return Objects.equals(firstName, customer.firstName) &&
+                Objects.equals(lastName, customer.lastName) &&
+                Objects.equals(phone, customer.phone) &&
+                Objects.equals(createdAt, customer.createdAt) &&
+                Objects.equals(orders, customer.orders);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), firstName, lastName, phone, createdAt);
+        return Objects.hash(super.hashCode(), firstName, lastName, phone, createdAt, orders);
     }
 
     @Override
@@ -84,6 +102,7 @@ public class Customer extends BaseEntity {
                 ", lastName='" + lastName + '\'' +
                 ", phone='" + phone + '\'' +
                 ", createdAt=" + createdAt +
+                ", orders=" + orders +
                 '}';
     }
 }

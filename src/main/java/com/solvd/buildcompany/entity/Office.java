@@ -2,7 +2,9 @@ package com.solvd.buildcompany.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -21,16 +23,16 @@ public class Office extends BaseEntity {
     @Column(length = 45, name = "email")
     private String email;
 
-    @OneToMany(targetEntity=Order.class)
+    @OneToMany(mappedBy = "office", targetEntity=Order.class)
     private List<Order> orders;
 
-    @OneToMany(targetEntity=Employee.class)
+    @OneToMany(mappedBy = "office",targetEntity=Employee.class)
     private List<Employee> employees;
 
-    @OneToMany(targetEntity=Garage.class)
+    @OneToMany(mappedBy = "office",targetEntity=Garage.class)
     private List<Garage> garages;
 
-    @OneToMany(targetEntity=Warehouse.class)
+    @OneToMany(mappedBy = "office",targetEntity=Warehouse.class)
     private List<Warehouse> warehouses;
 
     public Office() {
