@@ -1,37 +1,50 @@
 package com.solvd.buildcompany.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
-import java.util.ArrayList;
+import javax.xml.bind.annotation.*;
 import java.util.List;
 import java.util.Objects;
 
+@XmlType(name = "office")
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 @Entity(name = "offices")
 public class Office extends BaseEntity {
 
+    @XmlElement(name = "city")
     @Column(length = 45, name = "city")
     private String city;
 
+    @XmlElement(name = "address")
     @Column(length = 45, name = "address")
     private String address;
 
+    @XmlElement(name = "phone")
     @Column(length = 45, name = "phone")
     private String phone;
 
+    @XmlElement(name = "email")
     @Column(length = 45, name = "email")
     private String email;
 
+    @XmlElement(name = "orders")
     @OneToMany(mappedBy = "office", targetEntity=Order.class)
     private List<Order> orders;
 
+    @XmlElement(name = "employees")
     @OneToMany(mappedBy = "office",targetEntity=Employee.class)
     private List<Employee> employees;
 
+    @XmlElement(name = "garages")
+    @JsonManagedReference
     @OneToMany(mappedBy = "office",targetEntity=Garage.class)
     private List<Garage> garages;
 
+    @XmlElement(name = "warehouses")
     @OneToMany(mappedBy = "office",targetEntity=Warehouse.class)
     private List<Warehouse> warehouses;
 

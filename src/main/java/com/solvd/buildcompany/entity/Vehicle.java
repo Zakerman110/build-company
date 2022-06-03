@@ -1,11 +1,15 @@
 package com.solvd.buildcompany.entity;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import java.util.Objects;
 
+@JsonAutoDetect
 @Entity(name = "vehicles")
 public class Vehicle extends BaseEntity {
 
@@ -22,6 +26,7 @@ public class Vehicle extends BaseEntity {
     private String color;
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "garages_id", referencedColumnName = "id")
     private Garage garage;
 
