@@ -6,6 +6,10 @@ import com.solvd.buildcompany.dao.impl.VehicleDAO;
 import com.solvd.buildcompany.entity.Office;
 import com.solvd.buildcompany.entity.Vehicle;
 import com.solvd.buildcompany.infrastructure.ConnectionPool;
+import com.solvd.buildcompany.mapper.OfficeMapper;
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -16,6 +20,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import java.io.File;
 import java.io.IOException;
+import java.io.Reader;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -44,6 +49,8 @@ public class BuildCompanyApplication {
         //testXML();
 
         //testJson();
+
+        testMyBatis();
     }
 
     public void testDAO() {
@@ -174,6 +181,34 @@ public class BuildCompanyApplication {
             System.out.println(ex.toString());
         }
 
+    }
+
+    public void testMyBatis() {
+
+        SqlSessionFactory sqlSessionFactory;
+        OfficeMapper officeMapper;
+        Reader reader = null;
+        try {
+            reader = Resources
+                    .getResourceAsReader("mybatis-config.xml");
+            sqlSessionFactory = new SqlSessionFactoryBuilder().build(reader);
+            officeMapper = sqlSessionFactory.openSession().getMapper(OfficeMapper.class);
+            List<Office> offices = officeMapper.getOffice();
+            Office office = officeMapper.getOfficeById(1);
+
+            File file = new File( "XmlOutput/MyBatisOffice.xml" );
+
+            try {
+                JAXBContext context = JAXBContext.newInstance(Office.class);
+                Marshaller marshaller = context.createMarshaller();
+                marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+                marshaller.marshal(office, file);
+            } catch (JAXBException ex) {
+                System.out.println(ex.toString());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }
