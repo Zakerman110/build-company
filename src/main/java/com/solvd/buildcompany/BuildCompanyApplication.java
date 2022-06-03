@@ -3,12 +3,15 @@ package com.solvd.buildcompany;
 import com.solvd.buildcompany.dao.impl.OfficeDAO;
 import com.solvd.buildcompany.entity.Office;
 import com.solvd.buildcompany.infrastructure.ConnectionPool;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import javax.annotation.PostConstruct;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -30,7 +33,9 @@ public class BuildCompanyApplication {
 
         //testDAO();
 
-        testConnectionPool();
+        //testConnectionPool();
+
+        testXML();
     }
 
     public void testDAO() {
@@ -128,6 +133,28 @@ public class BuildCompanyApplication {
         }
         System.out.println("Connection pool size: " + pool.getConnectionPoolSize() +
                 " Used connections size: " + pool.getUsedConnectionsSize());
+    }
+
+    public void testXML() {
+
+        Office office = officeDAO.getEntityById(1);
+
+        File file = new File( "XmlOutput/office.xml" );
+
+        try {
+            JAXBContext context = JAXBContext.newInstance(Office.class);
+            Marshaller marshaller = context.createMarshaller();
+            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+            marshaller.marshal(office, file);
+        } catch (JAXBException ex) {
+            System.out.println(ex.toString());
+        }
+
+
+    }
+
+    public void textJson() {
+
     }
 
 }
