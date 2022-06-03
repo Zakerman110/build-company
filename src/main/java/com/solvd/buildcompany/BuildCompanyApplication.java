@@ -1,7 +1,10 @@
 package com.solvd.buildcompany;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.solvd.buildcompany.dao.impl.OfficeDAO;
+import com.solvd.buildcompany.dao.impl.VehicleDAO;
 import com.solvd.buildcompany.entity.Office;
+import com.solvd.buildcompany.entity.Vehicle;
 import com.solvd.buildcompany.infrastructure.ConnectionPool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -12,6 +15,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -23,6 +27,8 @@ public class BuildCompanyApplication {
 
     @Autowired
     public OfficeDAO officeDAO;
+    @Autowired
+    public VehicleDAO vehicleDAO;
 
     public static void main(String[] args) {
         SpringApplication.run(BuildCompanyApplication.class, args);
@@ -35,7 +41,9 @@ public class BuildCompanyApplication {
 
         //testConnectionPool();
 
-        testXML();
+        //testXML();
+
+        //testJson();
     }
 
     public void testDAO() {
@@ -153,7 +161,18 @@ public class BuildCompanyApplication {
 
     }
 
-    public void textJson() {
+    public void testJson() {
+
+        Vehicle vehicle = vehicleDAO.getEntityById(1);
+
+        File file = new File("JsonOutput/vehicle.json");
+
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.writeValue(file, vehicle);
+        } catch (IOException ex) {
+            System.out.println(ex.toString());
+        }
 
     }
 

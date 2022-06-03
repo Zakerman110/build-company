@@ -1,11 +1,11 @@
 package com.solvd.buildcompany.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.xml.bind.annotation.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -40,6 +40,7 @@ public class Office extends BaseEntity {
     private List<Employee> employees;
 
     @XmlElement(name = "garages")
+    @JsonManagedReference
     @OneToMany(mappedBy = "office",targetEntity=Garage.class)
     private List<Garage> garages;
 

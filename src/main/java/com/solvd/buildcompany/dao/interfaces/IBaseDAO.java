@@ -13,4 +13,6 @@ public interface IBaseDAO<T> {
     void updateEntity(T entity);
 
     void deleteEntity(T entity);
+
+    long count();
 }

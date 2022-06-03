@@ -1,5 +1,8 @@
 package com.solvd.buildcompany.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
@@ -11,9 +14,11 @@ public class Garage extends BaseEntity {
     private String address;
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "offices_id", referencedColumnName = "id")
     private Office office;
 
+    @JsonManagedReference
     @OneToMany(targetEntity=Vehicle.class)
     private List<Vehicle> vehicles;
 

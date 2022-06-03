@@ -10,6 +10,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.List;
 
+
 public class BaseDAO<T> implements IBaseDAO<T> {
 
     @PersistenceContext
@@ -51,5 +52,13 @@ public class BaseDAO<T> implements IBaseDAO<T> {
     @Transactional
     public void deleteEntity(T entity) {
         entityManager.remove(entityManager.merge(entity));
+    }
+
+    @Override
+    public long count() {
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Long> cq = cb.createQuery(Long.class);
+        cq.select(cb.count(cq.from(type)));
+        return entityManager.createQuery(cq).getSingleResult();
     }
 }
